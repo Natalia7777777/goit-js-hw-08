@@ -9,13 +9,10 @@ const textArea = document.querySelector('textarea[name=message]');
 form.addEventListener("input", throttle(onFormInput, 500));
 form.addEventListener("submit", onFormSumbit);
 
-
 let formData = {
     email: '',
     message: '',
 };
-
-populateForm(formData);
 
 function onFormInput(event) {
     formData[event.target.name] = event.target.value;
@@ -24,15 +21,21 @@ function onFormInput(event) {
 }
 
 function onFormSumbit(event) {
+    event.preventDefault();
+
     const parsedForm = JSON.parse(localStorage.getItem(STORAGE_KEY));
 
-    console.log(parsedForm);
+    if (formData.email == "" || formData.message == "") {
+        console.log("Заполните все поля");
+    } else {
+        console.log(parsedForm);
+    }
     
-    event.preventDefault();
-    event.currentTarget.reset();
-
     localStorage.removeItem(STORAGE_KEY);
+    event.currentTarget.reset();
 }
+
+populateForm(formData);
 
 function populateForm(formData) {
     if (localStorage.getItem(STORAGE_KEY)) {
