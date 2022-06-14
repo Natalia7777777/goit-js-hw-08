@@ -14,6 +14,12 @@ let formData = {
     message: '',
 };
 
+const parsedForm = JSON.parse(localStorage.getItem(STORAGE_KEY));
+if (localStorage.getItem(STORAGE_KEY)) {
+    formData.email = parsedForm.email;
+    formData.message = parsedForm.message;
+}
+
 function onFormInput(event) {
     formData[event.target.name] = event.target.value;
 
@@ -23,27 +29,29 @@ function onFormInput(event) {
 function onFormSumbit(event) {
     event.preventDefault();
 
-    const parsedForm = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    const formElements = event.currentTarget.elements;
+    const email = formElements.email.value;
+    const message = formElements.message.value;
 
-    if (formData.email == "" || formData.message == "") {
-        console.log("Заполните все поля");
-    } else {
-        console.log(parsedForm);
+    if (email === '' || message === '') {
+        return alert('Заполните все поля');
     }
+
+    console.log(formData);
+    formData.email = '';
+    formData.message = '';
+
     
     localStorage.removeItem(STORAGE_KEY);
     event.currentTarget.reset();
 }
 
-populateForm(formData);
+populateForm(parsedForm);
 
-function populateForm(formData) {
+function populateForm(parsedForm) {
     if (localStorage.getItem(STORAGE_KEY)) {
-        formData = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        // const parsedForm = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        input.value = parsedForm.email;
+        textArea.value = parsedForm.message;
     }
-
-    input.value = formData.email;
-    textArea.textContent = formData.message;
 }
-
-
